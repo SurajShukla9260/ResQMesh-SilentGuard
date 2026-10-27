@@ -1,125 +1,203 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ResQMesh // SilentGuard Command</title>
-  <link rel="manifest" href="/manifest.json" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+  <title>ResQMesh | SilentGuard</title>
+
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- Leaflet Map CSS -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <!-- Project CSS -->
   <link rel="stylesheet" href="./src/style.css" />
 </head>
+
 <body>
+  <!-- Background Effects -->
   <div class="ambient-glow glow-1"></div>
   <div class="ambient-glow glow-2"></div>
 
-  <div class="command-container">
-    <aside class="mobile-chassis">
-      <div class="phone-rim">
-        <div class="speaker-notch"></div>
-        <div class="phone-screen">
-          <header class="applet-topbar">
-            <div class="applet-meta">
-              <span class="utility-badge">CALC v2.4</span>
-              <span class="battery-readout" id="phoneBattery">88% ⚡</span>
-            </div>
-            <button id="toggleMicBtn" class="stealth-switch">
-              <span class="pulse-dot"></span>
-              <span class="btn-text">SafeSense: OFF</span>
-            </button>
-          </header>
+  <main class="command-container">
 
-          <main class="calc-interface">
+    <!-- Mobile Calculator Interface -->
+    <section class="mobile-chassis">
+      <div class="phone-rim">
+
+        <div class="speaker-notch"></div>
+
+        <div class="phone-screen">
+
+          <div class="applet-topbar">
+            <span class="utility-badge">SECURE UTILITY</span>
+            <span class="battery-readout">SYSTEM READY</span>
+          </div>
+
+          <button class="stealth-switch" id="toggleMicBtn" type="button">
+            <span class="pulse-dot"></span>
+            <span class="btn-text">SafeSense: OFF</span>
+          </button>
+
+          <div class="calc-interface">
+
             <div class="calc-screen-display">
-              <div class="history-rail" id="calcHistory">&nbsp;</div>
-              <input type="text" id="calcDisplay" readonly value="" placeholder="0" />
+              <div class="history-rail" id="calcHistory"></div>
+
+              <input
+                type="text"
+                id="calcDisplay"
+                value="0"
+                readonly
+                aria-label="Calculator display"
+              />
             </div>
 
             <div class="calc-keypad">
-              <button class="c-key op-fn" id="clearBtn">AC</button>
-              <button class="c-key op-fn" data-val="+/-">±</button>
-              <button class="c-key op-fn" data-val="%">%</button>
-              <button class="c-key op-accent" data-val="/">÷</button>
+              <button class="c-key op-fn" data-action="clear">AC</button>
+              <button class="c-key op-fn" data-action="delete">DEL</button>
+              <button class="c-key op-fn" data-value="%">%</button>
+              <button class="c-key op-accent" data-value="/">÷</button>
 
-              <button class="c-key" data-val="7">7</button>
-              <button class="c-key" data-val="8">8</button>
-              <button class="c-key" data-val="9">9</button>
-              <button class="c-key op-accent" data-val="*">×</button>
+              <button class="c-key" data-value="7">7</button>
+              <button class="c-key" data-value="8">8</button>
+              <button class="c-key" data-value="9">9</button>
+              <button class="c-key op-accent" data-value="*">×</button>
 
-              <button class="c-key" data-val="4">4</button>
-              <button class="c-key" data-val="5">5</button>
-              <button class="c-key" data-val="6">6</button>
-              <button class="c-key op-accent" data-val="-">−</button>
+              <button class="c-key" data-value="4">4</button>
+              <button class="c-key" data-value="5">5</button>
+              <button class="c-key" data-value="6">6</button>
+              <button class="c-key op-accent" data-value="-">−</button>
 
-              <button class="c-key" data-val="1">1</button>
-              <button class="c-key" data-val="2">2</button>
-              <button class="c-key" data-val="3">3</button>
-              <button class="c-key op-accent" data-val="+">+</button>
+              <button class="c-key" data-value="1">1</button>
+              <button class="c-key" data-value="2">2</button>
+              <button class="c-key" data-value="3">3</button>
+              <button class="c-key op-accent" data-value="+">+</button>
 
-              <button class="c-key zero-span" data-val="0">0</button>
-              <button class="c-key" data-val=".">.</button>
-              <button class="c-key op-eval" id="evalBtn">=</button>
+              <button class="c-key zero-span" data-value="0">0</button>
+              <button class="c-key" data-value=".">.</button>
+              <button class="c-key op-eval" data-action="calculate">=</button>
             </div>
-          </main>
 
-          <footer class="applet-footer">
-            <div class="duress-hint">Duress Vector: <code>9999 [EXEC]</code></div>
-            <div class="signal-tag" id="networkTelemetry">Mesh Carrier: Ready</div>
-          </footer>
+          </div>
+
+          <div class="applet-footer">
+            <span>ResQMesh Secure Mode</span>
+            <span class="duress-hint">Protected</span>
+          </div>
+
         </div>
       </div>
-    </aside>
+    </section>
 
-    <main class="control-dashboard">
+    <!-- Main Dashboard -->
+    <section class="control-dashboard">
+
       <header class="dash-top-panel">
+
+        <!-- ResQMesh Logo -->
         <div class="branding">
-          <div class="brand-crest"><span class="crest-dot"></span></div>
+          <div class="brand-crest">
+            <img
+              src="/resqmesh-logo.jpeg"
+              alt="ResQMesh Logo"
+              class="brand-logo"
+            />
+          </div>
+
           <div class="brand-titles">
-            <h1>ResQMesh <span class="accent-title">// SilentGuard</span></h1>
-            <p>Acoustic FFT & Covert Duress Autonomous Dispatch Engine</p>
+            <h1>ResQ<span class="accent-title">Mesh</span></h1>
+            <p>SilentGuard Emergency Network</p>
           </div>
         </div>
 
+        <!-- System Status -->
         <div class="telemetry-deck">
+
           <div class="telemetry-pill">
-            <span class="label">ENGINE</span>
+            <span class="label">NETWORK</span>
             <span class="val green" id="engineStatus">CONNECTING</span>
           </div>
+
           <div class="telemetry-pill">
-            <span class="label">ACTIVE RADAR</span>
-            <span class="val amber" id="activeIncidentsCount">0 ALERTS</span>
+            <span class="label">SECURITY</span>
+            <span class="val amber">ACTIVE</span>
           </div>
-          <div class="telemetry-pill">
-            <span class="label">LATENCY</span>
-            <span class="val" id="latencyStat">~14ms</span>
-          </div>
+
         </div>
       </header>
 
-      <section class="ops-grid">
-        <div class="map-card">
+      <!-- Map and Incident Feed -->
+      <div class="ops-grid">
+
+        <!-- Live Tactical Map -->
+        <section class="map-card">
+
           <div class="card-bar">
-            <div class="card-title"><span class="radar-ping"></span> TACTICAL MAP</div>
-            <div class="coords-display" id="focalCoords">30.7670° N, 76.5750° E</div>
+            <div class="card-title">
+              <span class="radar-ping"></span>
+              LIVE TACTICAL MAP
+            </div>
+
+            <span class="coords-display" id="coordsDisplay">
+              GPS STANDBY
+            </span>
           </div>
+
           <div id="tacticalMap"></div>
-        </div>
 
-        <div class="feed-card">
+        </section>
+
+        <!-- Emergency Incident Feed -->
+        <section class="feed-card">
+
           <div class="card-bar">
-            <div class="card-title"><span class="feed-pulse"></span> INCIDENT AUDIT STREAM</div>
-            <span class="badge-tag">LIVE DISPATCH</span>
-          </div>
-          <div class="feed-scroll-container">
-            <ul id="incidentFeed" class="incident-stream-list"></ul>
-          </div>
-        </div>
-      </section>
-    </main>
-  </div>
+            <div class="card-title">
+              <span class="feed-pulse"></span>
+              INCIDENT FEED
+            </div>
 
+            <span class="utility-badge">LIVE</span>
+          </div>
+
+          <div class="feed-scroll-container">
+            <ul class="incident-stream-list" id="incidentStreamList">
+              <li class="incident-card">
+                <div class="card-headline">
+                  <span class="incident-id-tag">SYSTEM READY</span>
+                  <span class="badge-tag">STANDBY</span>
+                </div>
+
+                <p style="color: #94a3b8; font-size: 12px;">
+                  Waiting for incoming emergency incidents.
+                </p>
+              </li>
+            </ul>
+          </div>
+
+        </section>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Leaflet Map JavaScript -->
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- Project JavaScript -->
   <script type="module" src="./src/main.js"></script>
+
 </body>
 </html>
