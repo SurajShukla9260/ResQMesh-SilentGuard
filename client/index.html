@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ResQMesh // SilentGuard Command</title>
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <div class="command-container">
+    <aside class="mobile-chassis">
+      <div class="phone-rim">
+        <div class="speaker-notch"></div>
+        <div class="phone-screen">
+          <header class="applet-topbar">
+            <div class="applet-meta">
+              <span class="utility-badge">CALC v2.4</span>
+              <span class="battery-readout" id="phoneBattery">88% ⚡</span>
+            </div>
+            <button id="toggleMicBtn" class="stealth-switch">
+              <span class="pulse-dot"></span>
+              <span class="btn-text">SafeSense: OFF</span>
+            </button>
+          </header>
+
+          <main class="calc-interface">
+            <div class="calc-screen-display">
+              <div class="history-rail" id="calcHistory">&nbsp;</div>
+              <input type="text" id="calcDisplay" readonly value="" placeholder="0" />
+            </div>
+
+            <div class="calc-keypad">
+              <button class="c-key op-fn" id="clearBtn">AC</button>
+              <button class="c-key op-fn" data-val="+/-">±</button>
+              <button class="c-key op-fn" data-val="%">%</button>
+              <button class="c-key op-accent" data-val="/">÷</button>
+
+              <button class="c-key" data-val="7">7</button>
+              <button class="c-key" data-val="8">8</button>
+              <button class="c-key" data-val="9">9</button>
+              <button class="c-key op-accent" data-val="*">×</button>
+
+              <button class="c-key" data-val="4">4</button>
+              <button class="c-key" data-val="5">5</button>
+              <button class="c-key" data-val="6">6</button>
+              <button class="c-key op-accent" data-val="-">−</button>
+
+              <button class="c-key" data-val="1">1</button>
+              <button class="c-key" data-val="2">2</button>
+              <button class="c-key" data-val="3">3</button>
+              <button class="c-key op-accent" data-val="+">+</button>
+
+              <button class="c-key zero-span" data-val="0">0</button>
+              <button class="c-key" data-val=".">.</button>
+              <button class="c-key op-eval" id="evalBtn">=</button>
+            </div>
+          </main>
+
+          <footer class="applet-footer">
+            <div class="duress-hint">Duress Vector: <code>9999 [EXEC]</code></div>
+            <div class="signal-tag" id="networkTelemetry">Mesh Carrier: Ready</div>
+          </footer>
+        </div>
+      </div>
+    </aside>
+
+    <main class="control-dashboard">
+      <header class="dash-top-panel">
+        <div class="branding">
+          <div class="brand-crest"><span class="crest-dot"></span></div>
+          <div class="brand-titles">
+            <h1>ResQMesh <span class="accent-title">// SilentGuard</span></h1>
+            <p>Acoustic FFT & Covert Duress Autonomous Dispatch Engine</p>
+          </div>
+        </div>
+
+        <div class="telemetry-deck">
+          <div class="telemetry-pill">
+            <span class="label">ENGINE</span>
+            <span class="val green" id="engineStatus">CONNECTING</span>
+          </div>
+          <div class="telemetry-pill">
+            <span class="label">ACTIVE RADAR</span>
+            <span class="val amber" id="activeIncidentsCount">0 ALERTS</span>
+          </div>
+          <div class="telemetry-pill">
+            <span class="label">LATENCY</span>
+            <span class="val" id="latencyStat">~14ms</span>
+          </div>
+        </div>
+      </header>
+
+      <section class="ops-grid">
+        <div class="map-card">
+          <div class="card-bar">
+            <div class="card-title"><span class="radar-ping"></span> TACTICAL MAP</div>
+            <div class="coords-display" id="focalCoords">30.7670° N, 76.5750° E</div>
+          </div>
+          <div id="tacticalMap"></div>
+        </div>
+
+        <div class="feed-card">
+          <div class="card-bar">
+            <div class="card-title"><span class="feed-pulse"></span> INCIDENT AUDIT STREAM</div>
+            <span class="badge-tag">LIVE DISPATCH</span>
+          </div>
+          <div class="feed-scroll-container">
+            <ul id="incidentFeed" class="incident-stream-list"></ul>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
