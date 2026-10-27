@@ -25,7 +25,7 @@ Standard panic systems fail in active coercion scenarios due to three critical g
 
 ---
 
-## ⚙️ Core Technical Pillars
+## ⚙️ Core Technical Pillars*-
 
 ### 1. Elastic Transit Corridor (Haversine Geofencing)
 * Projects a dynamic, flexible bounding polygon along the commuter's planned route vector.
