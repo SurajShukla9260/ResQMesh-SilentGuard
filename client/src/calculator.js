@@ -3,49 +3,61 @@ export function setupCalculator(onDuressTrigger) {
   const historyRail = document.getElementById("calcHistory");
   let currentFormula = "";
 
-  document.querySelectorAll(".c-key[data-val]").forEach((btn) => {
+  // 1. Handle all numeric and operator buttons (using data-value)
+  document.querySelectorAll(".c-key[data-value]").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const val = btn.getAttribute("data-val");
-
-      if (val === "+/-") {
-        if (display.value.startsWith("-")) display.value = display.value.slice(1);
-        else if (display.value) display.value = "-" + display.value;
-        return;
-      }
+      const val = btn.getAttribute("data-value");
 
       if (val === "%") {
-        display.value = String(parseFloat(display.value || 0) / 100);
+        try {
+          const evaluated = Function('"use strict";return (' + (currentFormula || "0") + ")")();
+          display.value = String(evaluated / 100);
+          currentFormula = display.value;
+        } catch {
+          display.value = "0";
+          currentFormula = "";
+        }
         return;
       }
 
       currentFormula += val;
       display.value = currentFormula;
 
+      // Covert Duress Trigger PIN check
       if (currentFormula.includes("9999")) {
         console.warn("[COVERT TRIGGER] 9999 Duress PIN detected!");
         onDuressTrigger("COVERT_PIN_TRIGGER");
         currentFormula = "";
         display.value = "0";
-        historyRail.innerText = "Error: 0x99";
+        if (historyRail) historyRail.innerText = "Error: 0x99";
       }
     });
   });
 
-  document.getElementById("clearBtn").addEventListener("click", () => {
-    currentFormula = "";
-    display.value = "";
-    historyRail.innerText = "";
-  });
+  // 2. Handle Action buttons (AC, DEL, =)
+  document.querySelectorAll(".c-key[data-action]").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const action = btn.getAttribute("data-action");
 
-  document.getElementById("evalBtn").addEventListener("click", () => {
-    try {
-      historyRail.innerText = currentFormula + " =";
-      const evaluated = Function('"use strict";return (' + currentFormula + ")")();
-      display.value = evaluated;
-      currentFormula = String(evaluated);
-    } catch {
-      display.value = "Error";
-      currentFormula = "";
-    }
+      if (action === "clear") {
+        currentFormula = "";
+        display.value = "0";
+        if (historyRail) historyRail.innerText = "";
+      } else if (action === "delete") {
+        currentFormula = currentFormula.slice(0, -1);
+        display.value = currentFormula || "0";
+      } else if (action === "calculate") {
+        if (!currentFormula) return;
+        try {
+          if (historyRail) historyRail.innerText = currentFormula + " =";
+          const evaluated = Function('"use strict";return (' + currentFormula + ")")();
+          display.value = String(evaluated);
+          currentFormula = String(evaluated);
+        } catch {
+          display.value = "Error";
+          currentFormula = "";
+        }
+      }
+    });
   });
 }

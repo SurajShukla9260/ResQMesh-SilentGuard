@@ -19,6 +19,8 @@ export async function fetchLiveCoordinates() {
   return fallbackCoords;
 }
 
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export async function sendEmergencyPayload(triggerType, metrics = {}) {
   const telemetryTag = document.getElementById("networkTelemetry");
   if (telemetryTag) {
@@ -42,7 +44,7 @@ export async function sendEmergencyPayload(triggerType, metrics = {}) {
   };
 
   try {
-    const res = await fetch("http://localhost:5000/api/alerts/trigger", {
+    const res = await fetch(`${API_BASE_URL}/api/alerts/trigger`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)

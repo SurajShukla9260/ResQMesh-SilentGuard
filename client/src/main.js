@@ -22,27 +22,36 @@ const audioDetector = new AudioDistressDetector({
 });
 
 const micBtn = document.getElementById("toggleMicBtn");
-micBtn.addEventListener("click", async () => {
-  if (!audioDetector.isListening) {
-    try {
-      await audioDetector.start();
-      micBtn.classList.add("active");
-      micBtn.querySelector(".btn-text").innerText = "SafeSense: ARMED";
-    } catch {
-      alert("Microphone permission required for acoustic detection!");
+if (micBtn) {
+  micBtn.addEventListener("click", async () => {
+    if (!audioDetector.isListening) {
+      try {
+        await audioDetector.start();
+        micBtn.classList.add("active");
+        const btnText = micBtn.querySelector(".btn-text");
+        if (btnText) btnText.innerText = "SafeSense: ARMED";
+      } catch {
+        alert("Microphone permission required for acoustic detection!");
+      }
+    } else {
+      audioDetector.stop();
+      micBtn.classList.remove("active");
+      const btnText = micBtn.querySelector(".btn-text");
+      if (btnText) btnText.innerText = "SafeSense: OFF";
     }
-  } else {
-    audioDetector.stop();
-    micBtn.classList.remove("active");
-    micBtn.querySelector(".btn-text").innerText = "SafeSense: OFF";
-  }
+  });
+}
+
+// 4. Connect to Backend WebSocket Gateway with Polling Fallback
+const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+const socket = io(API_BASE_URL, {
+  transports: ["websocket", "polling"]
 });
 
-// 4. Connect to Backend WebSocket Gateway
-const socket = io("http://localhost:5000");
-
 const engineStatus = document.getElementById("engineStatus");
+
 socket.on("connect", () => {
+  console.log("[Socket.io] Connected to backend on port 5000");
   if (engineStatus) {
     engineStatus.innerText = "ONLINE (WS)";
     engineStatus.className = "val green";
@@ -50,6 +59,7 @@ socket.on("connect", () => {
 });
 
 socket.on("disconnect", () => {
+  console.warn("[Socket.io] Disconnected from backend");
   if (engineStatus) {
     engineStatus.innerText = "OFFLINE";
     engineStatus.className = "val";
@@ -57,5 +67,6 @@ socket.on("disconnect", () => {
 });
 
 socket.on("incident:incoming", (incident) => {
+  console.log("[Socket.io] Incoming incident payload received:", incident);
   renderIncomingIncident(incident);
 });

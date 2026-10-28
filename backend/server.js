@@ -63,7 +63,21 @@ app.get("/api/alerts", async (req, res) => {
   }
 });
 
-const PORT = 5000;
+const PORT = Number(process.env.PORT || 5000);
+
+server.on("error", (error) => {
+  if (error.code === "EADDRINUSE") {
+    const fallbackPort = PORT + 1;
+    console.warn(`[PORT] ${PORT} is busy, retrying on ${fallbackPort}`);
+    server.listen(fallbackPort, () => {
+      console.log(`SilentGuard Dispatch Server listening on http://localhost:${fallbackPort}`);
+    });
+    return;
+  }
+
+  throw error;
+});
+
 server.listen(PORT, () => {
   console.log(`SilentGuard Dispatch Server listening on http://localhost:${PORT}`);
 });
